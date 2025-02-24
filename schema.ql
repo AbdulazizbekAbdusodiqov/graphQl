@@ -45,6 +45,7 @@ type Owner {
 type Query {
   findAllCar: [Car!]!
   findAllOwners: [Owner!]!
+  findAllOwnersFilter(limit: Int, page: Int, search: String, sort: Boolean): [Owner!]!
   findOneCar(id: ID!): Car!
   findOneOwner(id: ID!): Owner!
 }

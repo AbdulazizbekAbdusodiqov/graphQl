@@ -3,6 +3,7 @@ import { CreateOwnerDto } from "./dto/create-owner.dto";
 import { UpdateOwnerDto } from "./dto/update-owner.dto";
 import { Args, ID, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { Owner } from "./entities/owner.entity";
+import { OwnerFilterDto } from "./dto/owner-filter.dto";
 
 @Resolver("owner")
 export class OwnerResolver {
@@ -11,6 +12,12 @@ export class OwnerResolver {
     @Query(() => [Owner])
     findAllOwners() {
         return this.ownerService.findAll();
+    }
+    
+    @Query(() => [Owner])
+    findAllOwnersFilter(@Args() filter:OwnerFilterDto):Promise<Owner[]> 
+    {
+        return this.ownerService.findAllFilter(filter);
     }
 
     @Query(() => Owner)
@@ -35,4 +42,6 @@ export class OwnerResolver {
     removeOwner(@Args("id", { type: () => ID }) id: string) {
         return this.ownerService.remove(+id);
     }
+
+    
 }

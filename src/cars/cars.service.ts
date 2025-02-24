@@ -3,7 +3,7 @@ import { CreateCarDto } from "./dto/create-car.dto";
 import { UpdateCarDto } from "./dto/update-car.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Car } from "./entities/car.entity";
-import { Repository } from "typeorm";
+import { JoinColumn, Repository } from "typeorm";
 import { Owner } from "src/owner/entities/owner.entity";
 
 @Injectable()
@@ -26,7 +26,7 @@ export class CarsService {
   }
 
   findOne(id: number) {
-    return this.carRepo.findOneBy({ id });
+    return this.carRepo.findOne({ where: { id }, relations: ["owner"] });
   }
 
   async update(id: number, updateCarDto: UpdateCarDto) {

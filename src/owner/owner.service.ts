@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Owner } from './entities/owner.entity';
 import { Repository } from 'typeorm';
 import { Car } from 'src/cars/entities/car.entity';
+import { OwnerFilterDto } from './dto/owner-filter.dto';
 
 @Injectable()
 export class OwnerService {
@@ -31,5 +32,25 @@ export class OwnerService {
 
   async remove(id: number) {
     return this.ownerRepo.delete({id})
+  }
+
+  async findAllFilter(filter : OwnerFilterDto):Promise<Owner[]>{
+    const query = await this.ownerRepo.createQueryBuilder("owner");
+
+    if(filter.search){
+      query.andWhere("owner.name iLIKE :search", {
+        search: `%${filter.search}%`,
+      })
+    }
+    if(filter.sort !== undefined){
+      query.orderBy("owner.name", filter.sort ? "ASC": "DESC");
+    }
+
+    if(filter.page && filter.limit){
+      const skip = (filter.page-1) * filter.limit;
+      query.skip(skip).take(filter.limit)
+    }
+
+    return query.getMany();
   }
 }
