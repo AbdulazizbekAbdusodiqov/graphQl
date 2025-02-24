@@ -4,7 +4,7 @@ import { UpdateCarDto } from "./dto/update-car.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Car } from "./entities/car.entity";
 import { Repository } from "typeorm";
-import { error } from "console";
+import { Owner } from "src/owner/entities/owner.entity";
 
 @Injectable()
 export class CarsService {
@@ -15,9 +15,14 @@ export class CarsService {
   create(createCarDto: CreateCarDto) {
     return this.carRepo.save(createCarDto);
   }
+  
+  createOwner(createCarDto: CreateCarDto, owner:Owner) {
+    const newCar = this.carRepo.create({...createCarDto, owner})
+    return this.carRepo.save(newCar);
+  }
 
   findAll() {
-    return this.carRepo.find();
+    return this.carRepo.find({relations:["owner"]});
   }
 
   findOne(id: number) {

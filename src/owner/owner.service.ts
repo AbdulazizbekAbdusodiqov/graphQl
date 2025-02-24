@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { CreateOwnerDto } from './dto/create-owner.dto';
 import { UpdateOwnerDto } from './dto/update-owner.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Owner } from './entities/owner.entity';
+import { Repository } from 'typeorm';
+import { Car } from 'src/cars/entities/car.entity';
 
 @Injectable()
 export class OwnerService {
+    constructor(
+      @InjectRepository(Owner) private readonly ownerRepo: Repository<Owner>
+    ) {}
+
   create(createOwnerDto: CreateOwnerDto) {
-    return 'This action adds a new owner';
+    return this.ownerRepo.save(createOwnerDto)
   }
 
   findAll() {
-    return `This action returns all owner`;
+    return this.ownerRepo.find({relations:["car"]})
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} owner`;
+    return this.ownerRepo.findOneBy({id})
   }
 
-  update(id: number, updateOwnerDto: UpdateOwnerDto) {
-    return `This action updates a #${id} owner`;
+  async update(id: number, updateOwnerDto: UpdateOwnerDto) {
+    await this.ownerRepo.update(id, updateOwnerDto)
+    return this.findOne(id) 
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} owner`;
+  async remove(id: number) {
+    return this.ownerRepo.delete({id})
   }
 }

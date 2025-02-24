@@ -1,4 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateOwnerDto } from './create-owner.dto';
+import { Field, InputType } from "@nestjs/graphql";
 
-export class UpdateOwnerDto extends PartialType(CreateOwnerDto) {}
+@InputType()
+export class UpdateOwnerDto {
+    @Field({nullable:true})
+    name?: string;
+}

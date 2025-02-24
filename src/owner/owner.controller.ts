@@ -7,19 +7,19 @@ import { UpdateOwnerDto } from './dto/update-owner.dto';
 export class OwnerController {
   constructor(private readonly ownerService: OwnerService) {}
 
-  @Post()
-  create(@Body() createOwnerDto: CreateOwnerDto) {
-    return this.ownerService.create(createOwnerDto);
-  }
-
+  
   @Get()
   findAll() {
     return this.ownerService.findAll();
   }
-
+  
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ownerService.findOne(+id);
+  }
+  @Post()
+  create(@Body() createOwnerDto: CreateOwnerDto) {
+    return this.ownerService.create(createOwnerDto);
   }
 
   @Patch(':id')
