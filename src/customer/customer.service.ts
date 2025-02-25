@@ -16,11 +16,11 @@ export class CustomerService {
     }
 
     findAll() {
-        return this.customerRepo.find();
+        return this.customerRepo.find({relations:["order"]});
     }
 
     findOne(id: number) {
-        return this.customerRepo.findOne({ where: { id } });
+        return this.customerRepo.findOne({ where: { id },relations:["order"] });
     }
 
     async update(id: number, updateCustomerInput: UpdateCustomerInput) {
